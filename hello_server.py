@@ -1,5 +1,6 @@
 from concurrent import futures
 
+import time
 import grpc
 import helloworld_pb2
 import helloworld_pb2_grpc
@@ -16,6 +17,14 @@ class Greeter(helloworld_pb2_grpc.GreeterServicer):
         return helloworld_pb2.HelloReply(
             message="Hello, %s!" % ', '.join(names)
         )
+    
+    def SayHelloServerStreaming(self, request, context):
+        for i in range(5):
+            yield helloworld_pb2.HelloReply(
+                message="Hello, %s! -- %d" % (request.name, i)
+            )
+            time.sleep(1)
+
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))

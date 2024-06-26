@@ -21,6 +21,11 @@ def run():
         response = stub.SayHelloClientStreaming(generate_requests())
         print('Greeter client received: ' + response.message)
 
+        # Server-side streaming call
+        responses = stub.SayHelloServerStreaming(helloworld_pb2.HelloRequest(name="World"))
+        for response in responses:
+            print('Greeter client received: ' + response.message)
+
 
 if __name__ == "__main__":
     run()
