@@ -27,5 +27,12 @@ def run():
             print('Greeter client received: ' + response.message)
 
 
+        # Bidirectional streaming call
+        responses = stub.SayHelloBidirectionalStreaming(generate_requests())
+        for response in responses:
+            print('Greeter client received: ' + response.message)
+
+
+
 if __name__ == "__main__":
     run()

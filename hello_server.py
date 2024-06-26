@@ -25,6 +25,10 @@ class Greeter(helloworld_pb2_grpc.GreeterServicer):
             )
             time.sleep(1)
 
+    def SayHelloBidirectionalStreaming(self, request_iterator, context):
+        for request in request_iterator:
+            yield helloworld_pb2.HelloReply(message=f"Hello, {request.name}")
+
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
