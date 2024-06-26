@@ -8,15 +8,19 @@ def run():
         name = None
         stub = helloworld_pb2_grpc.GreeterStub(channel)
 
-        while name.lower() != "exit":
-            name = input("What is your name? ")
+        # Unary call
+        response = stub.SayHello(helloworld_pb2.HelloRequest(name="World"))
+        print('Greeter client received: ' + response.message)
 
-            if name.lower() == "exit":
-                print("Bye!")
-                break
 
-            response = stub.SayHello(helloworld_pb2.HelloRequest(name=name))
-            print(f"Greeter client received: {response.message}")
+        # Client-side streaming call
+        def generate_requests():
+            for name in ["Alice", "Bob", "Charlie"]:
+                yield helloworld_pb2.HelloRequest(name=name)
+
+        response = stub.SayHelloClientStreaming(generate_requests())
+        print('Greeter client received: ' + response.message)
+
 
 if __name__ == "__main__":
     run()
